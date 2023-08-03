@@ -31,6 +31,5 @@ class User < TinkoffInvestApiCore
     stub.get_info(GetInfoRequest.new)
   end
 end
-pp(User.new.get_user_tariff)
-pp(User.new.get_accounts)
-pp(User.new.get_info)
+
+# pp(User.new.get_accounts)
