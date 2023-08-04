@@ -2,7 +2,7 @@
 # Source: orders.proto for package 'tinkoff.public.invest.api.contract.v1'
 
 require 'grpc'
-require 'orders_pb'
+require './lib/orders_pb'
 
 module Tinkoff
   module Public
@@ -10,55 +10,52 @@ module Tinkoff
       module Api
         module Contract
           module V1
-            module OperationsService
+            module OrdersStreamService
               class Service
-
                 include ::GRPC::GenericService
 
                 self.marshal_class_method = :encode
                 self.unmarshal_class_method = :decode
-                self.service_name = 'tinkoff.public.invest.api.contract.v1.OperationsService'
+                self.service_name = 'tinkoff.public.invest.api.contract.v1.OrdersStreamService'
 
-                # Метод получения списка операций по счёту.При работе с данным методом необходимо учитывать
-                # [особенности взаимодействия](/investAPI/operations_problems) с данным методом.
-                rpc :GetOperations, ::Tinkoff::Public::Invest::Api::Contract::V1::OperationsRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::OperationsResponse
-                # Метод получения портфеля по счёту.
-                rpc :GetPortfolio, ::Tinkoff::Public::Invest::Api::Contract::V1::PortfolioRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::PortfolioResponse
-                # Метод получения списка позиций по счёту.
-                rpc :GetPositions, ::Tinkoff::Public::Invest::Api::Contract::V1::PositionsRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::PositionsResponse
-                # Метод получения доступного остатка для вывода средств.
-                rpc :GetWithdrawLimits, ::Tinkoff::Public::Invest::Api::Contract::V1::WithdrawLimitsRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::WithdrawLimitsResponse
-                # Метод получения брокерского отчёта.
-                rpc :GetBrokerReport, ::Tinkoff::Public::Invest::Api::Contract::V1::BrokerReportRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::BrokerReportResponse
-                # Метод получения отчёта "Справка о доходах за пределами РФ".
-                rpc :GetDividendsForeignIssuer, ::Tinkoff::Public::Invest::Api::Contract::V1::GetDividendsForeignIssuerRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::GetDividendsForeignIssuerResponse
-                # Метод получения списка операций по счёту с пагинацией. При работе с данным методом необходимо учитывать
-                # [особенности взаимодействия](/investAPI/operations_problems) с данным методом.
-                rpc :GetOperationsByCursor, ::Tinkoff::Public::Invest::Api::Contract::V1::GetOperationsByCursorRequest, ::Tinkoff::Public::Invest::Api::Contract::V1::GetOperationsByCursorResponse
+                # Stream сделок пользователя
+                rpc :TradesStream, ::Tinkoff::Public::Invest::Api::Contract::V1::TradesStreamRequest,
+                    stream(::Tinkoff::Public::Invest::Api::Contract::V1::TradesStreamResponse)
               end
 
               Stub = Service.rpc_stub_class
             end
-            # Сервис предназначен для получения:</br> **1**.  списка операций по счёту;</br> **2**.
-            # портфеля по счёту;</br> **3**. позиций ценных бумаг на счёте;</br> **4**.
-            # доступного остатка для вывода средств;</br> **5**. получения различных отчётов.
-            module OperationsStreamService
-              class Service
 
+            module OrdersService
+              class Service
                 include ::GRPC::GenericService
 
                 self.marshal_class_method = :encode
                 self.unmarshal_class_method = :decode
-                self.service_name = 'tinkoff.public.invest.api.contract.v1.OperationsStreamService'
+                self.service_name = 'tinkoff.public.invest.api.contract.v1.OrdersService'
 
-                # Server-side stream обновлений портфеля
-                rpc :PortfolioStream, ::Tinkoff::Public::Invest::Api::Contract::V1::PortfolioStreamRequest, stream(::Tinkoff::Public::Invest::Api::Contract::V1::PortfolioStreamResponse)
-                # Server-side stream обновлений информации по изменению позиций портфеля
-                rpc :PositionsStream, ::Tinkoff::Public::Invest::Api::Contract::V1::PositionsStreamRequest, stream(::Tinkoff::Public::Invest::Api::Contract::V1::PositionsStreamResponse)
+                # Метод выставления заявки.
+                rpc :PostOrder, ::Tinkoff::Public::Invest::Api::Contract::V1::PostOrderRequest,
+                    ::Tinkoff::Public::Invest::Api::Contract::V1::PostOrderResponse
+                # Метод отмены биржевой заявки.
+                rpc :CancelOrder, ::Tinkoff::Public::Invest::Api::Contract::V1::CancelOrderRequest,
+                    ::Tinkoff::Public::Invest::Api::Contract::V1::CancelOrderResponse
+                # Метод получения статуса торгового поручения.
+                rpc :GetOrderState, ::Tinkoff::Public::Invest::Api::Contract::V1::GetOrderStateRequest,
+                    ::Tinkoff::Public::Invest::Api::Contract::V1::OrderState
+                # Метод получения списка активных заявок по счёту.
+                rpc :GetOrders, ::Tinkoff::Public::Invest::Api::Contract::V1::GetOrdersRequest,
+                    ::Tinkoff::Public::Invest::Api::Contract::V1::GetOrdersResponse
+                # Метод изменения выставленной заявки.
+                rpc :ReplaceOrder, ::Tinkoff::Public::Invest::Api::Contract::V1::ReplaceOrderRequest,
+                    ::Tinkoff::Public::Invest::Api::Contract::V1::PostOrderResponse
               end
 
               Stub = Service.rpc_stub_class
             end
+            # Сервис предназначен для работы с торговыми поручениями:</br> **1**.
+            # выставление;</br> **2**. отмена;</br> **3**. получение статуса;</br> **4**.
+            # расчёт полной стоимости;</br> **5**. получение списка заявок.
           end
         end
       end

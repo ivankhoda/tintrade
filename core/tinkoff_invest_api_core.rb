@@ -10,17 +10,16 @@ class TinkoffInvestApiCore
   include Tinkoff::Public::Invest::Api::Contract::V1
 
   def initialize
-    @production_host = CONFIG['production']['endpoint']
     @credentials = GRPC::Core::ChannelCredentials.new
     @namespace = Tinkoff::Public::Invest::Api::Contract::V1
   end
 
   private
 
-  attr_reader :production_host, :credentials, :namespace
+  attr_reader :credentials, :namespace
 
   def create_stub(service)
-    stub = namespace.const_get(service)::Stub.new(production_host, credentials)
+    stub = namespace.const_get(service)::Stub.new(host, credentials)
     StubWrapper.new(stub)
   end
 

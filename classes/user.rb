@@ -32,4 +32,4 @@ class User < TinkoffInvestApiCore
   end
 end
 
-# pp(User.new.get_accounts)
+pp(User.new.get_accounts)
