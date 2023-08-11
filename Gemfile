@@ -8,3 +8,4 @@ gem 'json'
 # development
 gem "rubocop"
 gem 'rerun'
+gem 'ruby-prof'

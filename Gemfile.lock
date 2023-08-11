@@ -30,6 +30,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
+    ruby-prof (1.6.3)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.4.2)
 
@@ -40,6 +41,7 @@ DEPENDENCIES
   json
   rerun
   rubocop
+  ruby-prof
 
 BUNDLED WITH
    2.3.3

@@ -23,7 +23,7 @@ class TinkoffInvestApiCore
     StubWrapper.new(stub)
   end
 
-  def request(name, args)
+  def request(name, args = {})
     namespace.const_get(name).new(args)
   end
 
