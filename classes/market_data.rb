@@ -15,22 +15,31 @@ class MarketData < TinkoffInvestApiCore
     @market_data_stream_stub = create_stub('MarketDataStreamService')
   end
 
+  SUBSCRIBE_REQUESTS = { candles: :subscribe_candles_request,
+                         order_book: :subscribe_order_book_request,
+                         trades: :subscribe_trades_request,
+                         info: :subscribe_info_request,
+                         last_price: :subscribe_last_price_request }.freeze
+
   attr_reader :market_data_stub, :market_data_stream_stub
 
   def share_by(code)
-    market_data_stub.share_by(InstrumentRequest.new(id_type: 2, class_code: 'TQBR', id: code))
+    market_data_stub.share_by(request(
+                                'GetLastPricesRequest', { id_type: 2, class_code: 'TQBR', id: code }
+                              ))
   end
 
   def get_last_prices(*instrument_id)
-    market_data_stub.get_last_prices(GetLastPricesRequest.new(instrument_id: [*instrument_id]))
+    market_data_stub.get_last_prices(request('GetLastPricesRequest', { instrument_id: [*instrument_id] }))
   end
 
   def get_order_book(instrument_id)
-    market_data_stub.get_order_book(GetOrderBookRequest.new(instrument_id: instrument_id, depth: 30))
+    market_data_stub.get_order_book(request('GetOrderBookRequest', { instrument_id: instrument_id, depth: 30 }))
   end
 
   def server_side_stream(*ids)
-    req = MarketDataServerSideStreamRequest.new(subscribe_last_price_request: request_iterator(ids))
+    req = request('MarketDataServerSideStreamRequest',
+                  { SUBSCRIBE_REQUESTS[:last_price] => request_iterator(ids) })
     market_data_stream_stub.market_data_server_side_stream(req)
   end
 
@@ -50,7 +59,7 @@ end
 MarketData.new.server_side_stream('0da66728-6c30-44c4-9264-df8fac2467ee',
                                   '6c97b684-ae84-435c-96fd-e20dc9197999').each do |item|
   # Handle each incoming message from the server
-  puts "Received message from server: #{item}"
+  puts "Received message from server: #{item.to_h.dig(:last_price, :price)}"
 end
 
 # b83ab195-dcd2-4d44-b9bf-27fa294f19a0

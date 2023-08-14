@@ -1,0 +1,30 @@
+events: wall_time
+
+fl=
+fn=Exception::backtrace
+0 2
+
+fl=
+fn=Exception::exception
+0 2
+
+fl=
+fn=BasicObject::method_missing
+0 9
+
+fl=/Users/ivan/websites/trade/tintrade/classes/user.rb
+fn=[global]::
+42 28
+cfl=
+cfn=BasicObject::method_missing
+calls=1 42
+42 9
+cfl=
+cfn=Exception::exception
+calls=1 42
+42 2
+cfl=
+cfn=Exception::backtrace
+calls=1 42
+42 2
+
