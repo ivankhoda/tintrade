@@ -64,4 +64,5 @@ end
 
 # b83ab195-dcd2-4d44-b9bf-27fa294f19a0
 # pp('bids:', MarketData.new.get_order_book('0da66728-6c30-44c4-9264-df8fac2467ee')['bids'])
+#
 # pp 'asks:', MarketData.new.get_order_book('0da66728-6c30-44c4-9264-df8fac2467ee')['asks']
